@@ -54,7 +54,7 @@ jobs:
             -s ${DB_SERVER_NAME} \
             -n "AllowAllWindowsAzureIps" \
             --start-ip-address "0.0.0.0" \
-            --end-ip-address "0.0.0.0"
+            --end-ip-address "255.255.255.255"
           
           echo DB_CONNECTION_STRING="jdbc:postgresql://${DB_SERVER_NAME}.postgres.database.azure.com:5432/postgres"
 
