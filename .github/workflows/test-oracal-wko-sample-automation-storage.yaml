@@ -16,9 +16,13 @@ on:
         description: 'Azure CSI Custom Url'
         required: false
         default: ''
+      workflow_name:
+        description: 'Current Workflow Name'
+        required: false
+        default: ''
 
 jobs:
-  build:
+  build-${{ github.event.inputs.workflow_name }}:
     # docker is pre-installed on ubuntu
     runs-on: ubuntu-latest
     steps:
