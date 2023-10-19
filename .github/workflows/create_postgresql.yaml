@@ -1,4 +1,4 @@
-name: WKO AKS Sample Auto Workflow
+name: Postgresql Provision Workflow
 
 on:
   # Allows you to run this workflow manually from the Actions tab
