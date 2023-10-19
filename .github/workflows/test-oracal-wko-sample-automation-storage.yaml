@@ -12,6 +12,10 @@ on:
         description: 'Oracle Account Password'
         required: true
         default: ''
+      minutes_time_out:
+        description: 'Minutes Time Out'
+        required: false
+        default: '60'
       azure_csi_custom_url:
         description: 'Azure CSI Custom Url'
         required: false
@@ -68,10 +72,10 @@ jobs:
           bash create-domain-on-aks.sh -u ${{ github.event.inputs.oracle_username }}  -p ${{ github.event.inputs.oracle_password }}
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
 
-      - name: Sleep 30 minutes
+      - name: Sleep ${{ github.event.inputs.minutes_time_out }} minutes
         continue-on-error: true
         run: |
-          sleep $((30 * 60))
+          sleep $((${{ github.event.inputs.minutes_time_out }} * 60))
 
       - name: Delete Resource
         run: |
