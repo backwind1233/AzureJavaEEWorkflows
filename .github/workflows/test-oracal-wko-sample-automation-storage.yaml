@@ -37,7 +37,7 @@ jobs:
           export namePrefix=wls
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
           
-          git clone -b update_automation_scripts_and_docs https://github.com/backwind1233/weblogic-kubernetes-operator.git
+          git clone -b custom_storage_class https://github.com/backwind1233/weblogic-kubernetes-operator.git
           cd $HOME/weblogic-kubernetes-operator/kubernetes/samples/scripts/create-weblogic-domain-on-azure-kubernetes-service
 
           bash create-domain-on-aks.sh -u oracle.ufgc5@aleeas.com -p YPK_dmh@jcwzuc4keq
