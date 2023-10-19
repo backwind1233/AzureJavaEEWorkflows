@@ -45,6 +45,12 @@ jobs:
           distribution: 'oracle'
           java-version: '17'
 
+      - name: Setup tmate session for github debugging
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 60
+        with:
+          detached: true
+
       - name: Run WKO automation scripts
         continue-on-error: true
         run: |          
@@ -62,9 +68,10 @@ jobs:
           bash create-domain-on-aks.sh -u ${{ github.event.inputs.oracle_username }}  -p ${{ github.event.inputs.oracle_password }}
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
 
-      - name: Setup tmate session for github debugging
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 30
+      - name: Sleep 30 minutes
+        continue-on-error: true
+        run: |
+          sleep $((30 * 60))
 
       - name: Delete Resource
         run: |
