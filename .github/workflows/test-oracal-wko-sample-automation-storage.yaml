@@ -3,6 +3,19 @@ name: WKO AKS Sample Auto Workflow
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      oracle_username:
+        description: 'Custom parameter'
+        required: true
+        default: 'default value'
+      oracle_password:
+        description: 'Custom parameter'
+        required: true
+        default: 'default value'
+      azure_csi_custom_url:
+        description: 'Custom parameter'
+        required: false
+        default: ''
 
 jobs:
   build:
@@ -40,8 +53,8 @@ jobs:
           git clone -b custom_storage_class https://github.com/backwind1233/weblogic-kubernetes-operator.git
           cd $HOME/weblogic-kubernetes-operator/kubernetes/samples/scripts/create-weblogic-domain-on-azure-kubernetes-service
 
-          export azure_csi_custom_url=https://raw.githubusercontent.com/backwind1233/AzureJavaEEWorkflows/main/Weblogic/WKO/StorageClass/smb.yaml
-          bash create-domain-on-aks.sh -u oracle.ufgc5@aleeas.com -p YPK_dmh@jcwzuc4keq
+          export azure_csi_custom_url=${{ github.event.inputs.azure_csi_custom_url }}
+          bash create-domain-on-aks.sh -u ${{ github.event.inputs.oracle_username }}  -p ${{ github.event.inputs.oracle_password }}
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
 
       - name: Setup tmate session for github debugging
