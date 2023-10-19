@@ -22,7 +22,8 @@ on:
         default: ''
 
 jobs:
-  build-${{ github.event.inputs.workflow_name }}:
+  build:
+    name : ${{ github.event.inputs.workflow_name }}
     # docker is pre-installed on ubuntu
     runs-on: ubuntu-latest
     steps:
