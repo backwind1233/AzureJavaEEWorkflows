@@ -36,6 +36,8 @@ jobs:
           export DB_PASSWORD="Secret123456" # PostgreSQL database password
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
           
+          az group create --name ${RESOURCE_GROUP_NAME} --location eastus
+
           az postgres server create \
             --resource-group ${RESOURCE_GROUP_NAME} \
             --name ${DB_SERVER_NAME}  \
