@@ -23,7 +23,7 @@ on:
       workflow_name:
         description: 'Current Workflow Name'
         required: false
-        default: ''
+        default: 'default'
 
 jobs:
   build:
