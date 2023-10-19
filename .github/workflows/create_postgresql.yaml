@@ -31,7 +31,7 @@ jobs:
         continue-on-error: true
         run: |
           export namePrefix=postgresql
-          export RESOURCE_GROUP_NAME=${{ namePrefix }}resourcegroup${{ github.run_id }}
+          export RESOURCE_GROUP_NAME=${namePrefix}resourcegroup${{ github.run_id }}
           export DB_SERVER_NAME="wlsdb$(date +%s)" # PostgreSQL server name
           export DB_PASSWORD="Secret123456" # PostgreSQL database password
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
