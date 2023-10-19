@@ -1,0 +1,66 @@
+name: WKO AKS Sample Auto Workflow
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      minutes_time_out:
+        description: 'Minutes Time Out'
+        required: false
+        default: '60'
+      workflow_name:
+        description: 'Current Workflow Name'
+        required: false
+        default: 'default'
+
+jobs:
+  build:
+    name : build-${{ github.event.inputs.workflow_name }}
+    # docker is pre-installed on ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login via Az CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_WKO_CREDENTIALS }}
+          allow-no-subscriptions: true
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: PostgreSQL provision
+        continue-on-error: true
+        run: |
+          export namePrefix=postgresql
+          export RESOURCE_GROUP_NAME=${{ namePrefix }}resourcegroup${{ github.run_id }}
+          export DB_SERVER_NAME="wlsdb$(date +%s)" # PostgreSQL server name
+          export DB_PASSWORD="Secret123456" # PostgreSQL database password
+          echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
+          
+          az postgres server create \
+            --resource-group ${RESOURCE_GROUP_NAME} \
+            --name ${DB_SERVER_NAME}  \
+            --location eastus \
+            --admin-user weblogic \
+            --ssl-enforcement Disabled \
+            --public-network-access Enabled \
+            --admin-password ${DB_PASSWORD} \
+            --sku-name B_Gen5_1
+          
+          echo "Allow Access To Azure Services"
+          az postgres server firewall-rule create \
+            -g ${RESOURCE_GROUP_NAME} \
+            -s ${DB_SERVER_NAME} \
+            -n "AllowAllWindowsAzureIps" \
+            --start-ip-address "0.0.0.0" \
+            --end-ip-address "0.0.0.0"
+          
+          echo DB_CONNECTION_STRING="jdbc:postgresql://${DB_SERVER_NAME}.postgres.database.azure.com:5432/postgres"
+
+      - name: Sleep ${{ github.event.inputs.minutes_time_out }} minutes
+        continue-on-error: true
+        run: |
+          sleep $((${{ github.event.inputs.minutes_time_out }} * 60))
+
+      - name: Delete Resource
+        run: |
+          az group delete --name ${{ env.namePrefix }}resourcegroup${{ github.run_id }} --yes --no-wait
