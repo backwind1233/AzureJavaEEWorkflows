@@ -5,15 +5,15 @@ on:
   workflow_dispatch:
     inputs:
       oracle_username:
-        description: 'Custom parameter'
+        description: 'Oracle Account UserName'
         required: true
-        default: 'default value'
+        default: ''
       oracle_password:
-        description: 'Custom parameter'
+        description: 'Oracle Account Password'
         required: true
-        default: 'default value'
+        default: ''
       azure_csi_custom_url:
-        description: 'Custom parameter'
+        description: 'Azure CSI Custom Url'
         required: false
         default: ''
 
