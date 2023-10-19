@@ -40,6 +40,7 @@ jobs:
           git clone -b custom_storage_class https://github.com/backwind1233/weblogic-kubernetes-operator.git
           cd $HOME/weblogic-kubernetes-operator/kubernetes/samples/scripts/create-weblogic-domain-on-azure-kubernetes-service
 
+          export azure_csi_custom_url=https://raw.githubusercontent.com/backwind1233/AzureJavaEEWorkflows/main/Weblogic/WKO/StorageClass/smb.yaml
           bash create-domain-on-aks.sh -u oracle.ufgc5@aleeas.com -p YPK_dmh@jcwzuc4keq
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
 
