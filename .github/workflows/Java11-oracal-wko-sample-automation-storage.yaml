@@ -1,4 +1,4 @@
-name: Java17 WKO AKS Sample Auto Workflow
+name: Java11 WKO AKS Sample Auto Workflow
 
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -43,11 +43,11 @@ jobs:
       - name: Set up kubectl
         uses: azure/setup-kubectl@v1
 
-      - name: Set up JDK 17
+      - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           distribution: 'oracle'
-          java-version: '17'
+          java-version: '11'
 
       - name: Setup tmate session for github debugging
         uses: mxschmitt/action-tmate@v3
