@@ -1,4 +1,4 @@
-name: Java11 WKO AKS Sample Auto Workflow
+name: Java8 WKO AKS Sample Auto Workflow
 
 on:
   # Allows you to run this workflow manually from the Actions tab
