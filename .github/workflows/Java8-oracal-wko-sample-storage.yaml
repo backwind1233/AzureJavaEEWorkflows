@@ -1,0 +1,85 @@
+name: Java11 WKO AKS Sample Auto Workflow
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      oracle_username:
+        description: 'Oracle Account UserName'
+        required: true
+        default: ''
+      oracle_password:
+        description: 'Oracle Account Password'
+        required: true
+        default: ''
+      minutes_time_out:
+        description: 'Minutes Time Out'
+        required: false
+        default: '60'
+      azure_csi_custom_url:
+        description: 'Azure CSI Custom Url'
+        required: false
+        default: ''
+      workflow_name:
+        description: 'Current Workflow Name'
+        required: false
+        default: 'default'
+
+jobs:
+  build:
+    name : build-${{ github.event.inputs.workflow_name }}
+    # docker is pre-installed on ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login via Az CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_WKO_CREDENTIALS }}
+          allow-no-subscriptions: true
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
+
+      - run: |
+          download_url="https://cfdownload.adobe.com/pub/adobe/coldfusion/java/java8/java8u361/jdk/jdk-8u361-linux-i586.tar.gz"
+          wget -O $RUNNER_TEMP/java_package.tar.gz $download_url
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'jdkfile'
+          jdkFile: ${{ runner.temp }}/java_package.tar.gz
+          java-version: '11.0.0'
+
+      - name: Setup tmate session for github debugging
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 180
+        with:
+          detached: true
+
+      - name: Run WKO automation scripts
+        continue-on-error: true
+        run: |          
+          cd $HOME
+          source $HOME/.bashrc
+          sudo apt install sed
+          export azureResourceUID=${{ github.run_id }}
+          export namePrefix=wls
+          echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
+          
+          git clone -b custom_storage_class_weblogic_12 https://github.com/backwind1233/weblogic-kubernetes-operator.git
+          cd $HOME/weblogic-kubernetes-operator/kubernetes/samples/scripts/create-weblogic-domain-on-azure-kubernetes-service
+
+          export azure_csi_custom_url=${{ github.event.inputs.azure_csi_custom_url }}
+          bash create-domain-on-aks.sh -u ${{ github.event.inputs.oracle_username }}  -p ${{ github.event.inputs.oracle_password }}
+          echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
+
+      - name: Sleep ${{ github.event.inputs.minutes_time_out }} minutes
+        continue-on-error: true
+        run: |
+          sleep $((${{ github.event.inputs.minutes_time_out }} * 60))
+
+      - name: Delete Resource
+        run: |
+          az group delete --name ${{ env.namePrefix }}resourcegroup${{ github.run_id }} --yes --no-wait
