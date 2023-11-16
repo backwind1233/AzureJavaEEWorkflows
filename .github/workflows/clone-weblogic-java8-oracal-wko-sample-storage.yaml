@@ -1,0 +1,63 @@
+name: Clone Java17 WKO AKS Sample Auto Workflow
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      oracle_username:
+        description: 'Oracle Account UserName'
+        required: true
+        default: ''
+      oracle_password:
+        description: 'Oracle Account Password'
+        required: true
+        default: ''
+      minutes_time_out:
+        description: 'Minutes Time Out'
+        required: false
+        default: '60'
+      azure_csi_custom_url:
+        description: 'Azure CSI Custom Url'
+        required: false
+        default: ''
+      workflow_name:
+        description: 'Current Workflow Name'
+        required: false
+        default: 'default'
+
+jobs:
+  build:
+    name : build-${{ github.event.inputs.workflow_name }}
+    # docker is pre-installed on ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login via Az CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          allow-no-subscriptions: true
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
+
+      - run: |
+          echo "Downloading jdk from OTN..."
+          jdkurl="https://download.oracle.com/java/17/latest/jdk-17_linux-aarch64_bin.tar.gz"
+          curl -s https://raw.githubusercontent.com/typekpb/oradown/master/oradown.sh  | bash -s -- --cookie=accept-weblogicserver-server --username="${{ github.event.inputs.oracle_username }}" --password="${{ github.event.inputs.oracle_password }}"         
+          sudo cp jdk-17_linux-aarch64_bin.tar.gz $RUNNER_TEMP/java_package.tar.gz
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'jdkfile'
+          jdkFile: ${{ runner.temp }}/java_package.tar.gz
+          java-version: '17.0.0'
+
+      - name: Setup tmate session for github debugging
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 180
+        with:
+          detached: true
+
+
