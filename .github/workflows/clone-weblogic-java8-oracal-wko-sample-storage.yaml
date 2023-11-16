@@ -45,8 +45,8 @@ jobs:
 
       - run: |
           echo "Downloading jdk from OTN..."
-          jdkurl="https://download.oracle.com/java/17/latest/jdk-17_linux-aarch64_bin.tar.gz"
-          curl -s https://raw.githubusercontent.com/typekpb/oradown/master/oradown.sh  | bash -s -- --cookie=accept-weblogicserver-server --username="${{ github.event.inputs.oracle_username }}" --password="${{ github.event.inputs.oracle_password }}" $jdkurl       
+          
+          curl -s https://raw.githubusercontent.com/typekpb/oradown/master/oradown.sh  | bash -s -- --cookie=accept-weblogicserver-server --username="${{ github.event.inputs.oracle_username }}" --password="${{ github.event.inputs.oracle_password }}" "https://download.oracle.com/java/17/latest/jdk-17_linux-aarch64_bin.tar.gz"       
           sudo cp jdk-17_linux-aarch64_bin.tar.gz $RUNNER_TEMP/java_package.tar.gz
       - uses: actions/setup-java@v3
         with:
