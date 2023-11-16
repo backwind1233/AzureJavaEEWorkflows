@@ -38,7 +38,7 @@ jobs:
       - name: 'Set up archived Oracle JDK 11'
         uses: oracle-actions/setup-java@v1
         with:
-          uri: https://download.oracle.com/otn/java/jdk/11.0.21%2B9/jdk-11.0.21_linux-aarch64_bin.tar.gz
+          uri: https://download.oracle.com/otn/java/jdk/8u391-b13/b291ca3e0c8548b5a51d5a5f50063037/jdk-8u391-linux-aarch64.tar.gz
 
       - name: Setup tmate session for github debugging
         uses: mxschmitt/action-tmate@v3
