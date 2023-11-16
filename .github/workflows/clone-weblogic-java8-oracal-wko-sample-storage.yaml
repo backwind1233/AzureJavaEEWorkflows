@@ -43,16 +43,11 @@ jobs:
       - name: Set up kubectl
         uses: azure/setup-kubectl@v1
 
-      - run: |
-          echo "Downloading jdk from OTN..."
-          
-          curl -s https://raw.githubusercontent.com/typekpb/oradown/master/oradown.sh  | bash -s -- --cookie=accept-weblogicserver-server --username="${{ github.event.inputs.oracle_username }}" --password="${{ github.event.inputs.oracle_password }}" "https://download.oracle.com/java/17/latest/jdk-17_linux-aarch64_bin.tar.gz"       
-          sudo cp jdk-17_linux-aarch64_bin.tar.gz $RUNNER_TEMP/java_package.tar.gz
-      - uses: actions/setup-java@v3
+      - name: 'Set up archived Oracle JDK 17.0.1'
+        uses: oracle-actions/setup-java@v1
         with:
-          distribution: 'jdkfile'
-          jdkFile: ${{ runner.temp }}/java_package.tar.gz
-          java-version: '17.0.0'
+          website: oracle.com
+          release: 8
 
       - name: Setup tmate session for github debugging
         uses: mxschmitt/action-tmate@v3
