@@ -4,14 +4,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      oracle_username:
-        description: 'Oracle Account UserName'
-        required: true
-        default: ''
-      oracle_password:
-        description: 'Oracle Account Password'
-        required: true
-        default: ''
       minutes_time_out:
         description: 'Minutes Time Out'
         required: false
