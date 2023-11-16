@@ -35,10 +35,10 @@ jobs:
       - name: Set up kubectl
         uses: azure/setup-kubectl@v1
 
-      - name: 'Set up archived Oracle JDK 17.0.1'
+      - name: 'Set up archived Oracle JDK 11'
         uses: oracle-actions/setup-java@v1
         with:
-          uri: https://download.oracle.com/java/17/latest/jdk-17_linux-aarch64_bin.tar.gz
+          uri: https://download.oracle.com/otn/java/jdk/11.0.21%2B9/jdk-11.0.21_linux-aarch64_bin.tar.gz
 
       - name: Setup tmate session for github debugging
         uses: mxschmitt/action-tmate@v3
