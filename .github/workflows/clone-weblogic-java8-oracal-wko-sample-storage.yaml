@@ -38,8 +38,7 @@ jobs:
       - name: 'Set up archived Oracle JDK 17.0.1'
         uses: oracle-actions/setup-java@v1
         with:
-          website: oracle.com
-          release: 8
+          uri: https://download.oracle.com/java/17/latest/jdk-17_linux-aarch64_bin.tar.gz
 
       - name: Setup tmate session for github debugging
         uses: mxschmitt/action-tmate@v3
