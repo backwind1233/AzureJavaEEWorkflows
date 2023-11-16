@@ -72,7 +72,7 @@ jobs:
           cd $HOME/weblogic-kubernetes-operator/kubernetes/samples/scripts/create-weblogic-domain-on-azure-kubernetes-service
 
           export azure_csi_custom_url=${{ github.event.inputs.azure_csi_custom_url }}
-          bash create-domain-on-aks.sh -u ${{ github.event.inputs.oracle_username }}  -p ::add-mask::${{ github.event.inputs.oracle_password }}
+          bash create-domain-on-aks.sh -u ${{ github.event.inputs.oracle_username }}  -p "::add-mask::${{ github.event.inputs.oracle_password }}"
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
 
       - name: Sleep ${{ github.event.inputs.minutes_time_out }} minutes
