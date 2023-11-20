@@ -30,15 +30,11 @@ jobs:
           allow-no-subscriptions: true
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Set up Helm
-        uses: azure/setup-helm@v3
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v1
 
-      - name: 'Set up archived Oracle JDK 11'
+      - name: 'Set up archived Oracle JDK 8'
         uses: oracle-actions/setup-java@v1
         with:
-          uri: https://download.oracle.com/otn/java/jdk/8u391-b13/b291ca3e0c8548b5a51d5a5f50063037/jdk-8u391-linux-aarch64.tar.gz
+          uri: https://download.oracle.com/otn-pub/java/jdk/8u391-b13/b291ca3e0c8548b5a51d5a5f50063037/jdk-8u391-linux-aarch64.tar.gz
 
       - name: Setup tmate session for github debugging
         uses: mxschmitt/action-tmate@v3
