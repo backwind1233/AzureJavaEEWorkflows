@@ -4,14 +4,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      oracle_username:
-        description: 'Oracle Account UserName'
-        required: true
-        default: ''
-      oracle_password:
-        description: 'Oracle Account Password'
-        required: true
-        default: ''
       minutes_time_out:
         description: 'Minutes Time Out'
         required: false
@@ -69,7 +61,7 @@ jobs:
           cd $HOME/weblogic-kubernetes-operator/kubernetes/samples/scripts/create-weblogic-domain-on-azure-kubernetes-service
 
           export azure_csi_custom_url=${{ github.event.inputs.azure_csi_custom_url }}
-          bash create-domain-on-aks.sh -u ${{ github.event.inputs.oracle_username }}  -p "::add-mask::${{ github.event.inputs.oracle_password }}"
+          bash create-domain-on-aks.sh -u ${{ secrets.ORACLE_USER_EMAIL }}  -p "${{ secrets.ORACLE_USER_PASSWORD }}"
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
 
       - name: Sleep ${{ github.event.inputs.minutes_time_out }} minutes

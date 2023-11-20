@@ -8,14 +8,6 @@ on:
         description: 'Minutes Time Out'
         required: false
         default: '60'
-      azure_csi_custom_url:
-        description: 'Azure CSI Custom Url'
-        required: false
-        default: ''
-      workflow_name:
-        description: 'Current Workflow Name'
-        required: false
-        default: 'default'
 
 jobs:
   build:
