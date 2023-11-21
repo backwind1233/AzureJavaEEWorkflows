@@ -24,6 +24,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           allow-no-subscriptions: true
+
       - name: Checkout Repository
         uses: actions/checkout@v2
 
@@ -33,7 +34,7 @@ jobs:
           export namePrefix=postgresql
           export RESOURCE_GROUP_NAME=${namePrefix}resourcegroup${{ github.run_id }}
           export DB_SERVER_NAME="wlsdb$(date +%s)" # PostgreSQL server name
-          export DB_PASSWORD="Secret123456" # PostgreSQL database password
+          export DB_PASSWORD="Secret$(date +%s)" # PostgreSQL database password
           echo "namePrefix=${namePrefix}" >> $GITHUB_ENV
           
           az group create --name ${RESOURCE_GROUP_NAME} --location eastus
@@ -57,6 +58,8 @@ jobs:
             --end-ip-address "255.255.255.255"
           
           echo DB_CONNECTION_STRING="jdbc:postgresql://${DB_SERVER_NAME}.postgres.database.azure.com:5432/postgres"
+          echo DB_SERVER_NAME=$DB_SERVER_NAME
+          echo DB_PASSWORD=$DB_PASSWORD
 
       - name: Sleep ${{ github.event.inputs.minutes_time_out }} minutes
         continue-on-error: true
