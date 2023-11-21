@@ -11,3 +11,6 @@ This workflow is used to provision a domain on pv weblogic instance.
 
 ## [Java17-oracal-wko-automation-storage.yaml](.github%2Fworkflows%2FJava17-oracal-wko-automation-storage.yaml)
 This workflow is used to provision a domain on pv weblogic instance.
+
+## Delete Resources
+- Run [tear-down-credentials.sh](.github%2Fworkflows%2Ftear-down-credentials.sh) to tear down credentials.
