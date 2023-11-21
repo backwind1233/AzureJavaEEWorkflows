@@ -71,6 +71,7 @@ if $USE_GITHUB_CLI; then
 
     msg "${GREEN}Using the GitHub CLI to remove variables.${NOFORMAT}"
     gh ${GH_FLAGS} variable remove DISAMBIG_PREFIX
+    gh ${GH_FLAGS} variable remove AZURE_ACCOUNT_USER
   } || {
     USE_GITHUB_CLI=false
   }

@@ -136,6 +136,9 @@ SP_ID=$( az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query '[0]'.id -
 az role assignment create --assignee ${SP_ID} --role "User Access Administrator" --subscription "${SUBSCRIPTION_ID}" --scope "/subscriptions/${SUBSCRIPTION_ID}"
 AZURE_CREDENTIALS=$(echo $SERVICE_PRINCIPAL | base64 -d)
 
+# Get Azure Account Uesrname
+AZURE_ACCOUNT_USER=$(az account show --query user.name -o tsv)
+
 msg "${GREEN}(4/4) Create secrets/variables in GitHub"
 if $USE_GITHUB_CLI; then
   {
@@ -157,6 +160,10 @@ if $USE_GITHUB_CLI; then
     gh ${GH_FLAGS} variable set DISAMBIG_PREFIX -b"${DISAMBIG_PREFIX}"
     msg "${YELLOW}\"DISAMBIG_PREFIX\""
     msg "${GREEN}${DISAMBIG_PREFIX}"
+    gh ${GH_FLAGS} variable set AZURE_ACCOUNT_USER -b"${AZURE_ACCOUNT_USER}"
+    msg "${YELLOW}\"AZURE_ACCOUNT_USER\""
+    msg "${GREEN}${AZURE_ACCOUNT_USER}"
+
 
   } || {
     USE_GITHUB_CLI=false
