@@ -58,7 +58,7 @@ jobs:
             --end-ip-address "255.255.255.255"
           
           echo DB_CONNECTION_STRING="jdbc:postgresql://${DB_SERVER_NAME}.postgres.database.azure.com:5432/postgres"
-          echo DB_SERVER_NAME=$DB_SERVER_NAME
+          echo DB_ADMIN_USER_NAME=weblogic@$DB_SERVER_NAME
           echo DB_PASSWORD=$DB_PASSWORD
 
       - name: Sleep ${{ github.event.inputs.minutes_time_out }} minutes
