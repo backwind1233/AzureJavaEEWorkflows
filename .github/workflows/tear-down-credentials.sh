@@ -33,15 +33,11 @@ msg() {
 
 setup_colors
 
-read -r -p "Enter disambiguation prefix: " DISAMBIG_PREFIX
-read -r -p "Enter owner/reponame (blank for upsteam of current fork): " OWNER_REPONAME
+DISAMBIG_PREFIX=$(gh variable list | grep DISAMBIG_PREFIX | awk '{print $2}')
 
-if [ -z "${OWNER_REPONAME}" ] ; then
-    GH_FLAGS=""
-else
-    GH_FLAGS="--repo ${OWNER_REPONAME}"
-fi
+GH_FLAGS=""
 
+echo DISAMBIG_PREFIX=$DISAMBIG_PREFIX
 SERVICE_PRINCIPAL_NAME=${DISAMBIG_PREFIX}sp
 
 # Execute commands
@@ -64,7 +60,7 @@ USE_GITHUB_CLI=false
   USE_GITHUB_CLI=false
 }
 
-msg "${GREEN}(3/3) Removing secrets...${NOFORMAT}"
+msg "${GREEN}(3/3) Removing secrets/variables...${NOFORMAT}"
 if $USE_GITHUB_CLI; then
   {
     msg "${GREEN}Using the GitHub CLI to remove secrets.${NOFORMAT}"
@@ -72,6 +68,9 @@ if $USE_GITHUB_CLI; then
     gh ${GH_FLAGS} secret remove SERVICE_PRINCIPAL
     gh ${GH_FLAGS} secret remove ORACLE_USER_EMAIL
     gh ${GH_FLAGS} secret remove ORACLE_USER_PASSWORD
+
+    msg "${GREEN}Using the GitHub CLI to remove variables.${NOFORMAT}"
+    gh ${GH_FLAGS} variable remove DISAMBIG_PREFIX
   } || {
     USE_GITHUB_CLI=false
   }

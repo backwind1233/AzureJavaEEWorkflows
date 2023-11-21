@@ -16,11 +16,12 @@
 # Set environment variables - the main variables you might want to configure.
 #
 # Three letters to disambiguate names.
-DISAMBIG_PREFIX=
+DISAMBIG_PREFIX=workflow-$(date +%s)
 # The location of the resource group. For example `eastus`. Leave blank to use your default location.
 LOCATION=
 
-OWNER_REPONAME=
+GH_FLAGS=""
+
 SLEEP_VALUE=30s
 
 # User Email of Oracle acount
@@ -59,13 +60,6 @@ msg() {
 
 setup_colors
 
-read -r -p "Enter a disambiguation prefix (try initials with a sequence number, such as ejb01): " DISAMBIG_PREFIX
-
-if [ "$DISAMBIG_PREFIX" == '' ] ; then
-    msg "${RED}You must enter a disambiguation prefix."
-    exit 1;
-fi
-
 # get ORACLE_USER_EMAIL if not set at the beginning of this file
 if [ "$ORACLE_USER_EMAIL" == '' ] ; then
     read -r -p "Enter user email of Oracle account: " ORACLE_USER_EMAIL
@@ -73,19 +67,9 @@ fi
 
 # get ORACLE_USER_PASSWORD if not set at the beginning of this file
 if [ "$ORACLE_USER_PASSWORD" == '' ] ; then
-    read -r -p "Enter user password of Oracle account: " ORACLE_USER_PASSWORD
+    read -s -r -p "Enter user password of Oracle account: " ORACLE_USER_PASSWORD
 fi
 
-# get OWNER_REPONAME if not set at the beginning of this file
-if [ "$OWNER_REPONAME" == '' ] ; then
-    read -r -p "Enter owner/reponame (blank for upsteam of current fork): " OWNER_REPONAME
-fi
-
-if [ -z "${OWNER_REPONAME}" ] ; then
-    GH_FLAGS=""
-else
-    GH_FLAGS="--repo ${OWNER_REPONAME}"
-fi
 
 # Comment out adding date suffix to make it works with tear down script
 # DISAMBIG_PREFIX=${DISAMBIG_PREFIX}`date +%m%d`
@@ -152,7 +136,7 @@ SP_ID=$( az ad sp list --display-name $SERVICE_PRINCIPAL_NAME --query '[0]'.id -
 az role assignment create --assignee ${SP_ID} --role "User Access Administrator" --subscription "${SUBSCRIPTION_ID}" --scope "/subscriptions/${SUBSCRIPTION_ID}"
 AZURE_CREDENTIALS=$(echo $SERVICE_PRINCIPAL | base64 -d)
 
-msg "${GREEN}(4/4) Create secrets in GitHub"
+msg "${GREEN}(4/4) Create secrets/variables in GitHub"
 if $USE_GITHUB_CLI; then
   {
     msg "${GREEN}Using the GitHub CLI to set secrets.${NOFORMAT}"
@@ -168,6 +152,9 @@ if $USE_GITHUB_CLI; then
     gh ${GH_FLAGS} secret set ORACLE_USER_PASSWORD -b"${ORACLE_USER_PASSWORD}"
     msg "${YELLOW}\"ORACLE_USER_PASSWORD\""
     msg "${GREEN}${ORACLE_USER_PASSWORD}"
+
+    msg "${GREEN}Using the GitHub CLI to set variables.${NOFORMAT}"
+    gh ${GH_FLAGS} variable set DISAMBIG_PREFIX -b"${DISAMBIG_PREFIX}"
     msg "${YELLOW}\"DISAMBIG_PREFIX\""
     msg "${GREEN}${DISAMBIG_PREFIX}"
 
