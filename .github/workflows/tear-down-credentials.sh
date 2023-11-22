@@ -56,7 +56,7 @@ USE_GITHUB_CLI=false
 {
   gh auth status && USE_GITHUB_CLI=true && msg "${YELLOW}GitHub CLI is installed and configured!"
 } || {
-  msg "${YELLOW}Cannot use the GitHub CLI. ${GREEN}No worries! ${YELLOW}We'll set up the GitHub secrets manually."
+  msg "${YELLOW}Cannot use the GitHub CLI. ${GREEN}No worries! ${YELLOW}We'll set up the GitHub secrets/variables manually."
   USE_GITHUB_CLI=false
 }
 
@@ -78,7 +78,7 @@ if $USE_GITHUB_CLI; then
 fi
 if [ $USE_GITHUB_CLI == false ]; then
   msg "${NOFORMAT}======================MANUAL REMOVAL======================================"
-  msg "${GREEN}Using your Web browser to remove secrets..."
+  msg "${GREEN}Using your Web browser to remove secrets/variables..."
   msg "${NOFORMAT}Go to the GitHub repository you want to configure."
   msg "${NOFORMAT}In the \"settings\", go to the \"secrets\" tab and remove the following secrets:"
   msg "(in ${YELLOW}yellow the secret name)"
@@ -86,6 +86,11 @@ if [ $USE_GITHUB_CLI == false ]; then
   msg "${YELLOW}\"SERVICE_PRINCIPAL\""
   msg "${YELLOW}\"ORACLE_USER_EMAIL\""
   msg "${YELLOW}\"ORACLE_USER_PASSWORD\""
+
+  msg "${NOFORMAT}In the \"settings\", go to the \"variables\" tab and remove the following variables:"
+  msg "(in ${YELLOW}yellow the variable name)"
+  msg "${YELLOW}\"DISAMBIG_PREFIX\""
+  msg "${YELLOW}\"AZURE_ACCOUNT_USER\""
   msg "${NOFORMAT}========================================================================"
 fi
 msg "${GREEN}Secrets removed"

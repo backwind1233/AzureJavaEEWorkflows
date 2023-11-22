@@ -116,7 +116,7 @@ USE_GITHUB_CLI=false
 {
   gh auth status && USE_GITHUB_CLI=true && msg "${YELLOW}GitHub CLI is installed and configured!"
 } || {
-  msg "${YELLOW}Cannot use the GitHub CLI. ${GREEN}No worries! ${YELLOW}We'll set up the GitHub secrets manually."
+  msg "${YELLOW}Cannot use the GitHub CLI. ${GREEN}No worries! ${YELLOW}We'll set up the GitHub secrets/variables manually."
   USE_GITHUB_CLI=false
 }
 
@@ -171,20 +171,27 @@ if $USE_GITHUB_CLI; then
 fi
 if [ $USE_GITHUB_CLI == false ]; then
   msg "${NOFORMAT}======================MANUAL SETUP======================================"
-  msg "${GREEN}Using your Web browser to set up secrets..."
+  msg "${GREEN}Using your Web browser to set up secrets/variables..."
   msg "${NOFORMAT}Go to the GitHub repository you want to configure."
   msg "${NOFORMAT}In the \"settings\", go to the \"secrets\" tab and the following secrets:"
   msg "(in ${YELLOW}yellow the secret name and${NOFORMAT} in ${GREEN}green the secret value)"
+
   msg "${YELLOW}\"AZURE_CREDENTIALS\""
   msg "${GREEN}${AZURE_CREDENTIALS}"
   msg "${YELLOW}\"SERVICE_PRINCIPAL\""
   msg "${GREEN}${SERVICE_PRINCIPAL}"
-  msg "${YELLOW}\"DISAMBIG_PREFIX\""
-  msg "${GREEN}${DISAMBIG_PREFIX}"
   msg "${YELLOW}\"ORACLE_USER_EMAIL\""
   msg "${GREEN}${ORACLE_USER_EMAIL}"
   msg "${YELLOW}\"ORACLE_USER_PASSWORD\""
   msg "${GREEN}${ORACLE_USER_PASSWORD}"
+
+  msg "${NOFORMAT}In the \"settings\", go to the \"variables\" tab and the following variables:"
+  msg "(in ${YELLOW}yellow the variable name and${NOFORMAT} in ${GREEN}green the variable value)"
+  msg "${YELLOW}\"DISAMBIG_PREFIX\""
+  msg "${GREEN}${DISAMBIG_PREFIX}"
+
+  msg "${YELLOW}\"AZURE_ACCOUNT_USER\""
+  msg "${GREEN}${AZURE_ACCOUNT_USER}"
   msg "${NOFORMAT}========================================================================"
 fi
 msg "${GREEN}Secrets configured"
